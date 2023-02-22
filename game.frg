@@ -24,9 +24,21 @@ pred init[s: State, n:NumberStack] {
         n.num2 != none && n.num2 >= 0 && n.num2 <= 9 
         n.num3 != none && n.num3 >= 0 && n.num3 <= 9 
         n.num4 != none && n.num4 >= 0 && n.num4 <= 9
+
+        totalValue = 0 //game has not started yet 
+        
+
+        s.next != none // cannot end here as game must start 
     //generate random four numbers 
     //check for four numbers (can be duplicates (do we need to check that?))
     //check for valid numbers (aka int between 1-9)
+}
+
+pred finalState[s:State]{
+    //NumberStack should not have any available numbers as it has all be used 
+    s.numbers.num1 = none && s.numbers.num2 = none && s.numbers.num3 = none && s.numbers.num4 = none 
+    //no more next numbers 
+    s.next = none 
 }
 
 pred isValidSolution {
