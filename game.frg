@@ -19,7 +19,7 @@ sig OperatorStack{
 
 
 abstract sig Operator{}
-sig Multiply,Divide,Subtract,Add extends Operator{}
+one sig Multiply,Divide,Subtract,Add extends Operator{}
 
 sig NumberStack{
     num1 : one Int, 
@@ -39,51 +39,31 @@ sig NumberStack{
 
 //inital state
 pred initState {
-
     some u: UnsolvedState | {
+        u.total = 0
 
-    
+        some disj a1, a2, a3, a4: Int {
 
-    //total = 0
-    u.total = 0
+            //TODO: How to make number 1 - 9?
+            a1 > 0 and a1 <= 7
+            a2 > 0 and a2 <= 7
+            a3 > 0 and a3 <= 7
+            a4 > 0 and a4 <= 7
 
-    //each number in the number stacks have to be 0 - 9
-    u.numbers.num1 >= 0 and u.numbers.num1 <= 7
-    u.numbers.num2 >= 0 and u.numbers.num2 <= 7
-    u.numbers.num3 >= 0 and u.numbers.num3 <= 7
-    u.numbers.num4 >= 0 and u.numbers.num4 <= 7
-    
-    //each number has to be unique
-    // #{row, col: Int | b.board[row][col] = X}
-    // // 1 --> 2, 3, 4   2--> 3, 4     3--> 4
-    // all a1, a2 | {
-    //     a1 != a2
-    // }
+            //TODO: Insert Predicate to Check Number Validity to 24
+            u.numbers.num1 = a1
+            u.numbers.num2 = a2
+            u.numbers.num3 = a3
+            u.numbers.num4 = a4
+        }
 
-
-    //operators are None
-    // some o : Operator | {
-    //     u.operators = o
-    //     o.op1 = none
-    //     o.op2 = none
-    //     o.op3 = none
-    // }
-
-
-    //nums (not sure if valid or not)
-    some a1, a2, a3, a4: Int | {
-    //     //TODO: NumbersValid[a1, a2, a3, a4]
-    //     //u.numbers.num1 = a1
-    //     //u.numbers.num2 = a2
-    //     //u.numbers.num3 = a3
-    //     //u.numbers.num4 = a4
-        
-        //temporary
-        a1 = 6
-        a2 = 6
-        a3 = 5
-        a4 = 4 //3 + 4 + 9 + 8 = 24
-    }
+        //operators are None
+        some o: OperatorStack {
+            u.operators = o
+            o.op1 = none
+            o.op2 = none
+            o.op3 = none
+        }
 }
 
 
@@ -134,4 +114,4 @@ pred Transition[u:UnsolvedState, s:SolvedState] {
 
 run {
   initState 
-  }
+  } for 1 State, 1 OperatorStack, 1 NumberStack
