@@ -41,8 +41,10 @@ sig NumberStack{
 
 //checks that the NumberValue should be between 1- 10
 pred inRangeTen(num:NumberValue) {
-    (num.eights = 1 and num.remainder >= 0 and num.remainder <= 2) 
-    or (num.eights = 0 and num.remainder > 0) 
+    num.eights = 1 or num.eights = 0
+    num.eights = 1 implies num.remainder >= 0 and num.remainder <= 2
+    num.eights = 0 implies num.remainder > 0
+    
 }
 
 
@@ -103,8 +105,6 @@ fun addHelperTwo(current:NumberValue, new_num:NumberValue): NumberValue {
     }
 }
 */
-
-
 //-----------------------------------------IGNORE ABOVE-----------------//
 
 
@@ -145,7 +145,6 @@ pred initState[u: UnsolvedState] {
 
     //operators are None
     u.operators = none
-    
     
     //Predicate to Check Number Validity to 24 and set numbers (unordered)
     some disj n1,n2,n3,n4:NumberValue {
@@ -214,7 +213,6 @@ pred Transition[u:UnsolvedState, s:SolvedState] {
 
 
 pred TransitionStates {
-    // TODO: Fill me in!
     some init:UnsolvedState, final: SolvedState {
             initState[init]
             Transition[init, final]
@@ -223,6 +221,5 @@ pred TransitionStates {
 }
 
 run {
-//   allNumbersInRange
   TransitionStates 
   } for 2 State, 2 OperatorStack, 2 NumberStack, 7 NumberValue
