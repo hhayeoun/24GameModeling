@@ -3,7 +3,7 @@
 //DEFINITIONS
 abstract sig State {
     numbers: one NumberStack,  //four numbers
-    operators: one OperatorStack, //three operators unsolved state, the operators are None
+    operators: lone OperatorStack, //three operators unsolved state, the operators are None
     total: one NumberValue //total value int
 }
 
@@ -11,9 +11,9 @@ one sig UnsolvedState, SolvedState extends State{}
 
 
 sig OperatorStack{
-    op1 : lone Operator,
-    op2: lone Operator,
-    op3: lone Operator
+    op1 : one Operator,
+    op2: one Operator,
+    op3: one Operator
 }
 
 //Sig to represent numbers greater than 7
@@ -68,15 +68,12 @@ pred subtractHelper[current:NumberValue, new_num:NumberValue, result:NumberValue
     }
 }
 
+//-------------------------IGNORE BELOW------------//
+
 //TODO: Multiplication -- need to figure out how to carry over from remainder to eights if necessary
 // 7 * 7 = 7 + 7 + 7 + 7 + --> 49 --> NumberValue(eights = 6, remainder = 1)
 
-
 //TODO: Divide -- need to keep in mind if it an actual divisble
-//
-
-
-//-------------------------IGNORE BELOW------------//
 /*
 pred multiplyHelper[current:NumberValue, new_num:NumberValue, result:NumberValue] {
     result.remainder = multiply[current.remainder, new_num.remainder]
@@ -136,77 +133,96 @@ pred ValidNumberSet[num1,num2,num3,num4,total:NumberValue,o1,o2,o3:Operator] {
 }
 
 
-//inital state
-pred initState[u: UnsolvedState, n1,n2,n3,n4,t: NumberValue, o:OperatorStack, o1,o2,o3:Operators] {
-    //TODO: UNcomment this when finished testing valid24 numbers
-    // some num: NumberValue {
-    //     num.eights = subtract[-8, 8]
-    //     num.remainder = 0
-    //     u.total = num
-    // }
-    
-    //makes sure that the numbers given numbers are from 1 - 10 
-    inRangeTen[n1]
-    inRangeTen[n2]
-    inRangeTen[n3]
-    inRangeTen[n4]
+//Sets the total = 0, operators = None, and makes sure that the numberstack has values that can produce 24
+pred initState[u: UnsolvedState] {
 
-    //TODO: Insert Predicate to Check Number Validity to 24
-    ValidNumberSet[n1,n2,n3,n4,t,o1,o2,o3]
+    //set the total to 0
+    some num: NumberValue {
+        num.eights = 0
+        num.remainder = 0
+        u.total = num
+    }
 
-    //sets the numstack value to that
-    u.numbers.num1 = n1
-    u.numbers.num2 = n2
-    u.numbers.num3 = n3
-    u.numbers.num4 = n4
-    u.total = t
-
-    o.op1 = o1
-    o.op2 = o2
-    o.op3 = o3
-
-    //Uncomment this when finished testing that the operators go to 24
     //operators are None
-    // some o: OperatorStack {
-    //     u.operators = o
-    //     o.op1 = o1
-    //     o.op2 = o2
-    //     o.op3 = o3
-    // }
+    u.operators = none
+    
+    
+    //Predicate to Check Number Validity to 24 and set numbers (unordered)
+    some disj n1,n2,n3,n4:NumberValue {
+        some t: NumberValue, o:OperatorStack, o1,o2,o3:Operator {
+            //makes sure that the numbers given numbers are from 1 - 10 
+            inRangeTen[n1]
+            inRangeTen[n2]
+            inRangeTen[n3]
+            inRangeTen[n4]
+
+            //check that they can produce 24
+            ValidNumberSet[n1,n2,n3,n4,t,o1,o2,o3]
+
+            //set the numbers to a random ordering
+            some disj r1, r2, r3, r4:NumberValue {
+                (r1 = n1 or r1 = n2 or r1 = n3 or r1 = n4)
+                and (r2 = n1 or r2 = n2 or r2 = n3 or r2 = n4)
+                and (r3 = n1 or r3 = n2 or r3 = n3 or r3 = n4)
+                and (r4 = n1 or r4 = n2 or r4 = n3 or r4 = n4)
+
+                u.numbers.num1 = r1
+                u.numbers.num2 = r2
+                u.numbers.num3 = r3
+                u.numbers.num4 = r4
+            }
+        }
+    }
 }
 
 pred finalState[s: SolvedState] {
-    //assume numbers are from initState by using the Transition predicate
-    //operators need to be in the correct position so that it totals to 24. We will use 18 temporarily
-    // some o: OperatorStack, o1,o2,o3:Operator {
+    some disj n1,n2,n3,n4:NumberValue {
+        some t: NumberValue, o:OperatorStack, o1,o2,o3:Operator {
+        //makes sure that the numbers given numbers are from 1 - 10 
+            ValidNumberSet[n1,n2,n3,n4,t,o1,o2,o3]
+            s.numbers.num1 = n1
+            s.numbers.num2 = n2
+            s.numbers.num3 = n3
+            s.numbers.num4 = n4
+            o.op1 = o1
+            o.op2 = o2
+            o.op3 = o3
+            s.operators = o
+            s.total = t
+        }
+    }
 }
 
+//compares the two states to make sure that they have the same NumberValues for their stack
 pred Transition[u:UnsolvedState, s:SolvedState] {
-    //check to see if all the numbers are the same (don't have to be the same order though)
-    //solved state has operators
-    //solved state has no next
-    //solved state has operators that ensure that it produces 24 -- need to call another predicate 
+    //number stacks are different
+    u.numbers != s.numbers
+
+    //even though the number stacks are different, they consist of the same values
+    some disj r1, r2, r3, r4:NumberValue {
+        (r1 = u.numbers.num1  or r1 = u.numbers.num2 or r1 = u.numbers.num3 or r1 = u.numbers.num4)
+        and (r2 = u.numbers.num1  or r2 = u.numbers.num2 or r2 = u.numbers.num3 or r2 = u.numbers.num4)
+        and (r3 = u.numbers.num1  or r3 = u.numbers.num2 or r3 = u.numbers.num3 or r3 = u.numbers.num4)
+        and (r4 = u.numbers.num1  or r4 = u.numbers.num2 or r4 = u.numbers.num3 or r4 = u.numbers.num4)
+
+        s.numbers.num1 = r1
+        s.numbers.num2 = r2
+        s.numbers.num3 = r3
+        s.numbers.num4 = r4
+    }
 }
 
 
 pred TransitionStates {
     // TODO: Fill me in!
     some init:UnsolvedState, final: SolvedState {
-        some disj num1,num2,num3,num4:NumberValue {
-            some t:NumberValue, o:OperatorStack, op1,op2,op3: Operator{
-                 -- constrains on the initial state
-            initState[init,num1,num2,num3,num4,t,o,op1,op2,op3]
-            -- constraints on the final state
-            // finalState[final]
-            -- all of the transitions between initial to final state are valid
-            // canTransition[init, final]
-            }
-       
-        }
+            initState[init]
+            Transition[init, final]
+            finalState[final]
     }
 }
 
 run {
 //   allNumbersInRange
   TransitionStates 
-  } for 2 State, 1 OperatorStack, 1 NumberStack, 6 NumberValue
+  } for 2 State, 2 OperatorStack, 2 NumberStack, 7 NumberValue
