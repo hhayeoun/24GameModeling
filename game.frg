@@ -44,7 +44,6 @@ pred inRangeTen(num:NumberValue) {
     num.eights = 1 or num.eights = 0
     num.eights = 1 implies num.remainder >= 0 and num.remainder <= 2
     num.eights = 0 implies num.remainder > 0
-    
 }
 
 
@@ -70,24 +69,24 @@ pred subtractHelper[current:NumberValue, new_num:NumberValue, result:NumberValue
     }
 }
 
+
 //-------------------------IGNORE BELOW------------//
 
 //TODO: Multiplication -- need to figure out how to carry over from remainder to eights if necessary
 // 7 * 7 = 7 + 7 + 7 + 7 + --> 49 --> NumberValue(eights = 6, remainder = 1)
 
 //TODO: Divide -- need to keep in mind if it an actual divisble
+
 /*
 pred multiplyHelper[current:NumberValue, new_num:NumberValue, result:NumberValue] {
     result.remainder = multiply[current.remainder, new_num.remainder]
 }
-
 
 fun multiplyHelper2(current:NumberValue, new_num:NumberValue): NumberValue {
     let new_total = NumberValue {
         new_num <= 0 => new_total else multiplyHelper2[addHelperTwo[current,new_num], subtract[new_num, 1]]
     }
 }
-
 
 fun addHelperTwo(current:NumberValue, new_num:NumberValue): NumberValue {
     let result = NumberValue {
@@ -105,6 +104,7 @@ fun addHelperTwo(current:NumberValue, new_num:NumberValue): NumberValue {
     }
 }
 */
+
 //-----------------------------------------IGNORE ABOVE-----------------//
 
 
