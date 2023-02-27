@@ -16,17 +16,19 @@ sig OperatorStack{
     op3: lone Operator
 }
 
+//Sig to represent numbers greater than 7
 sig NumberValue{
     eights: one Int,
     remainder: one Int
 }
 
-
+//Limited operators to either subtraction or addition
 abstract sig Operator{}
-one sig Subtract,Add extends Operator{}
+one sig Addition extends Operator{}
+one sig Subtraction extends Operator{}
 //one sig Multiply,Divide extends Operator{}
 
-
+//4 numbers within the stack
 sig NumberStack{
     num1 : one NumberValue, 
     num2 : one NumberValue,
@@ -37,14 +39,14 @@ sig NumberStack{
 
 //---------CHECKING VALID NUMBERVALUES ARE AND IN RANGE-------------//
 
+//checks that the NumberValue should be between 1- 10
 pred inRangeTen(num:NumberValue) {
     (num.eights = 1 and num.remainder >= 0 and num.remainder <= 2) 
     or (num.eights = 0 and num.remainder > 0) 
 }
 
 
-//Add --> carries the 1 to the eights, if it is greater than 7
-//What happens in the case where the eights > 7??
+//Adds two NumberValues together. Increases the result.eight by 1, if remainder sum > 7
 pred addHelper[current:NumberValue, new_num:NumberValue, result:NumberValue] {
     (add[current.remainder,new_num.remainder] < current.remainder) implies {
         result.eights = add[add[current.eights,new_num.eights],1]
@@ -55,7 +57,7 @@ pred addHelper[current:NumberValue, new_num:NumberValue, result:NumberValue] {
     }
 }
 
-//subtracts 1 from the eights, if the difference greater than the start
+//Subtracts two NumberValues together. Subtracts 1 from the eights, if the difference greater than the start
 pred subtractHelper[current:NumberValue, new_num:NumberValue, result:NumberValue] {
     ((subtract[current.remainder,new_num.remainder] < 0) or (subtract[current.remainder,new_num.remainder] > current.remainder)) implies {
         result.eights = subtract[subtract[current.eights,new_num.eights],1]
@@ -103,31 +105,32 @@ fun addHelperTwo(current:NumberValue, new_num:NumberValue): NumberValue {
         }
     }
 }
-
 */
 
-pred calculateValue[num1,num2,result:NumberValue,op:Operator] {
-    (op = Add) implies {
-        result = addHelper[num1,num2,result]
-    } else{
-        result = subtractHelper[num1,num2,result]
-    }
-}
 
 //-----------------------------------------IGNORE ABOVE-----------------//
 
 
-//TODO: create a predicate to check if the four numbers given actually has a solution to produce 24
+pred calculateValue[num1,num2,result:NumberValue,op:Operator] {
+    (op = Addition) implies {
+        addHelper[num1,num2,result]
+    } else{
+        subtractHelper[num1,num2,result]
+    }
+}
+
+//Check if the four numbers given actually has a solution to produce 24
 pred ValidNumberSet[num1,num2,num3,num4,total:NumberValue,o1,o2,o3:Operator] {
-    //op1 = Add
-    some result1,result2,result3:NumberValue {
-        //calculateValue[num1,num2,result1,op1]
-        // calculateValue[result1,num3,result2,op2]
-        // calculateValue[result2,num4,result3,op3]
-        //total = result1
-        //addHelper[num1,num2,result1] --> works!
-        //subtractHelper[num1,num2,result1] --> works!
-        //total = result1
+    some result1,result2,result3:NumberValue | {
+        //calculates the results using the number and operators provided
+        calculateValue[num1,num2,result1,o1]
+        calculateValue[result1,num3,result2,o2]
+        calculateValue[result2,num4,result3,o3]
+
+        //end result should equal 24 and set total = 24
+        result3.eights = 3
+        result3.remainder = 0
+        total = result3
     }
     
 }
@@ -206,4 +209,4 @@ pred TransitionStates {
 run {
 //   allNumbersInRange
   TransitionStates 
-  } for 2 State, 1 OperatorStack, 1 NumberStack, 10 NumberValue
+  } for 2 State, 1 OperatorStack, 1 NumberStack, 6 NumberValue
