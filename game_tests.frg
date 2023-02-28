@@ -53,7 +53,7 @@ test suite for subtractHelper{
     example noNegativeSubstraction is not {some n1, n2, result: NumberValue | subtractHelper[n1,n2,result]} for {
         NumberValue = `n1 + `n2 + `result 
         eights = `n1 -> 0 + `n2 -> 0 + `result -> 0
-        remainder = `n1 ->  2+ `n2 -> 3 + `result -> -1
+        remainder = `n1 ->  2 + `n2 -> 3 + `result -> -1
     }
 
     example resultInZero is {some n1, n2, result: NumberValue | subtractHelper[n1,n2,result]} for{
@@ -103,10 +103,14 @@ test suite for calculateValue{
     example incorrectSubtractValue  is not {some n1: NumberValue, n2: NumberValue, result: NumberValue, op: Subtraction | calculateValue[n1,n2,result, op]} for{
         NumberValue = `n1 + `n2 + `result 
         eights = `n1 -> 0 + `n2 -> 0 + `result -> 0
-        remainder = `n1 -> 3 + `n2 -> 1 + `result -> 0
-
+        remainder = `n1 -> 7 + `n2 -> 1 + `result -> 4
     }
 
+     example incorrectSubtractValue2 is {some n1: NumberValue, n2: NumberValue, result: NumberValue, op: Subtraction | calculateValue[n1,n2,result, op]} for{
+        NumberValue = `n1 + `n2 + `result 
+        eights = `n1 -> 0 + `n2 -> 0 + `result -> 0
+        remainder = `n1 -> 2 + `n2 -> 1  + `result -> 1
+    }
 }
 
 
@@ -126,13 +130,34 @@ test suite for calculateValue{
 // }
 
 test suite for ValidNumberSet{
-    example inBoundsNumberSet is {some n1,n2,n3,n4,total: NumberValue, o1,o2,o3: Addition| ValidNumberSet[n1,n2,n3,n4,total,o1,o2,o3]} for {
-        NumberValue = `n1 + `n2 + `n3+ `n4 + `result
-        eights = `n1 ->1 + `n2 -> 1 + `n3  -> 0 + `n4 -> 0 + `result -> 3
-        remainder = `n1 -> 2 + `n2 -> 0 + `n3 -> 2 + `n4 -> 4 + `result -> 0
-
+    example inBoundsAdditionNumberSet is {some n1,n2,n3,n4,total: NumberValue, o1,o2,o3: Addition| ValidNumberSet[n1,n2,n3,n4,total,o1,o2,o3]} for {
+        NumberValue = `n1 + `n2 + `n3+ `n4 + `result + `result2 + `result3 
+        eights = `n1 ->1 + `n2 -> 1 + `result -> 2 +  `n3  -> 0 + `result2 -> 2 + `n4 -> 0 + `result3 -> 3
+        remainder = `n1 -> 2 + `n2 -> 0 + `result -> 2 + `n3 -> 2 + `result2 -> 4 + `n4 -> 4 + `result3 -> 0
     }
 
-}
+    example inBoundsAdditionAndSubtraction is {some n1,n2,n3,n4,total: NumberValue, o1,o2: Addition, o3: Subtraction| ValidNumberSet[n1,n2,n3,n4,total,o1,o2,o3]} for {
+        NumberValue = `n1 + `n2 + `n3+ `n4 + `result + `result2 + `result3 
+        eights = `n1 -> 1 + `n2 -> 1 + `result -> 2 + `n3 -> 0 + `result2 -> 3 + `n4 -> 0 + `result3 -> 3 
+        remainder = `n1 -> 2 + `n2 -> 0 + `result -> 2 + `n3 -> 7 + `result2 -> 1 + `n4 -> 1 + `result3 -> 0
+    }
 
+    example inValidAdditionCombination is not {some n1,n2,n3,n4,total: NumberValue, o1,o2,o3: Addition| ValidNumberSet[n1,n2,n3,n4,total,o1,o2,o3]} for{
+        NumberValue = `n1 + `n2 + `n3+ `n4 + `result + `result2 + `result3 
+        eights = `n1 -> 0 + `n2 -> 0 + `result -> 0 + `n3 -> 0 +`result2 -> 1 + `n4 -> 0 + `result3 -> 1 
+        remainder = `n1 -> 1 + `n2 -> 2 + `result -> 3 + `n3 -> 3 + `result2 -> 1 + `n4 -> 4 + `result3 -> 5 
+    }
+
+    example inValidAdditionSubtractionCombination is not {some n1,n2,n3,n4,total: NumberValue, o1,o3:Addition, o2: Subtraction | ValidNumberSet[n1,n2,n3,n4,total,o1,o2,o3]} for{
+        NumberValue = `n1 + `n2 + `n3+ `n4 + `result + `result2 + `result3 
+        eights = `n1 -> 0 + `n2 -> 0 + `result -> 0 + `n3 -> 0 +`result2 -> 0 + `n4 -> 0 + `result3 -> 0
+        remainder = `n1 -> 2 + `n2 -> 1 + `result -> 3 + `n3 -> 3 + `result2 -> 0 + `n4 -> 4 + `result3 -> 4
+    }
+
+    example inValidNegativeCombination is not {some n1,n2,n3,n4,total: NumberValue, o1,o3, o2: Subtraction | ValidNumberSet[n1,n2,n3,n4,total,o1,o2,o3]} for{
+        NumberValue = `n1 + `n2 + `n3+ `n4 + `result + `result2 + `result3 
+        eights = `n1 -> 0 + `n2 -> 0 + `result -> 0 + `n3 -> 0 +`result2 -> 0 + `n4 -> 0 + `result3 -> 0
+        remainder = `n1 -> 7 + `n2 -> 1 + `result -> 6 + `n3 -> 3 + `result2 -> 3 + `n4 -> 4 + `result3 -> -1
+    }
+}
 

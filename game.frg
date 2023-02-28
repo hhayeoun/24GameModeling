@@ -63,7 +63,7 @@ pred subtractHelper[current:NumberValue, new_num:NumberValue, result:NumberValue
         result.eights = subtract[subtract[current.eights,new_num.eights],1]
         result.remainder = add[add[subtract[current.remainder, new_num.remainder], 7], 1]
     } else {
-        result.eights = subtract[current.eights,new_num.eights]
+        result.eights = subtract[current.eights, new_num.eights]
         result.remainder = subtract[current.remainder, new_num.remainder]
     }
 }
