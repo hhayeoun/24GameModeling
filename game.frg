@@ -37,8 +37,7 @@ sig NumberStack{
 }
 
 
-//---------CHECKING VALID NUMBERVALUES ARE AND IN RANGE-------------//
-
+//VALIDITY OF NUMBERS
 //checks that the NumberValue should be between 1- 10
 pred inRangeTen(num:NumberValue) {
     num.eights = 1 or num.eights = 0
@@ -47,6 +46,7 @@ pred inRangeTen(num:NumberValue) {
 }
 
 
+//OPERATOR HELPERS
 //Adds two NumberValues together. Increases the result.eight by 1, if remainder sum > 7
 pred addHelper[current:NumberValue, new_num:NumberValue, result:NumberValue] {
     (add[current.remainder,new_num.remainder] < current.remainder) implies {
@@ -70,42 +70,7 @@ pred subtractHelper[current:NumberValue, new_num:NumberValue, result:NumberValue
 }
 
 
-//-------------------------IGNORE BELOW------------//
-
-//TODO: Multiplication -- need to figure out how to carry over from remainder to eights if necessary
-// 7 * 7 = 7 + 7 + 7 + 7 + --> 49 --> NumberValue(eights = 6, remainder = 1)
-
-//TODO: Divide -- need to keep in mind if it an actual divisble
-
-/*
-pred multiplyHelper[current:NumberValue, new_num:NumberValue, result:NumberValue] {
-    result.remainder = multiply[current.remainder, new_num.remainder]
-}
-fun multiplyHelper2(current:NumberValue, new_num:NumberValue): NumberValue {
-    let new_total = NumberValue {
-        new_num <= 0 => new_total else multiplyHelper2[addHelperTwo[current,new_num], subtract[new_num, 1]]
-    }
-}
-fun addHelperTwo(current:NumberValue, new_num:NumberValue): NumberValue {
-    let result = NumberValue {
-        add[current.remainder,new_num.remainder] < current.remainder
-        => {
-            result.eights = add[add[current.eights,new_num.eights],1]
-            result.remainder = add[add[current.remainder, new_num.remainder], -8]
-            result
-            }
-        else {
-            result.remainder = add[current.remainder,new_num.remainder]
-            result.eights = add[current.eights,new_num.eights]
-            result
-        }
-    }
-}
-*/
-
-//-----------------------------------------IGNORE ABOVE-----------------//
-
-
+//Use addHelper if Addition and subtractHelper if Subtraction
 pred calculateValue[num1,num2,result:NumberValue,op:Operator] {
     (op = Addition) implies {
         addHelper[num1,num2,result]
@@ -131,6 +96,7 @@ pred ValidNumberSet[num1,num2,num3,num4,total:NumberValue,o1,o2,o3:Operator] {
 }
 
 
+//TESTING STATES
 //Sets the total = 0, operators = None, and makes sure that the numberstack has values that can produce 24
 pred initState[u: UnsolvedState] {
 
@@ -172,6 +138,7 @@ pred initState[u: UnsolvedState] {
     }
 }
 
+//makes sure the operators are not none and that the validnumberset outputs to 24
 pred finalState[s: SolvedState] {
     some disj n1,n2,n3,n4:NumberValue {
         some t: NumberValue, o:OperatorStack, o1,o2,o3:Operator {

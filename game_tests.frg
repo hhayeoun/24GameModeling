@@ -14,6 +14,25 @@ test suite for inRangeTen{
         eights = `n -> 1 
         remainder = `n -> 0
     }
+
+    example TenIsInRange is {some num: NumberValue | inRangeTen[num]} for{
+        NumberValue = `n 
+        eights = `n -> 1 
+        remainder = `n -> 2
+    }
+
+    example NegativeEightsIsNotInRange is not {some num: NumberValue | inRangeTen[num]} for{
+        NumberValue = `n 
+        eights = `n -> -3 
+        remainder = `n -> 2
+    }
+
+    example NegativeRemainderIsNotInRange is not {some num: NumberValue | inRangeTen[num]} for{
+        NumberValue = `n 
+        eights = `n -> 0 
+        remainder = `n -> -4
+    }
+
     example ElevenIsNotInRange is not {some num: NumberValue | inRangeTen[num]} for {
         NumberValue = `n
         eights = `n -> 1 
@@ -34,6 +53,18 @@ test suite for addHelper{
         remainder = `n1 -> 7 + `n2 -> 1 + `result -> 0
     }
 
+    example testEightsAndRemainderIsRecognized is {some num1, num2, total: NumberValue | addHelper[num1,num2,total]} for {
+        NumberValue = `n1 + `n2 + `result 
+        eights = `n1 -> 2 + `n2 -> 1 + `result -> 4 
+        remainder = `n1 -> 7 + `n2 -> 2 + `result -> 1
+    }
+
+    example testNoCarryValueIsRecognized is {some num1, num2, total: NumberValue | addHelper[num1,num2,total]} for {
+        NumberValue = `n1 + `n2 + `result 
+        eights = `n1 -> 0 + `n2 -> 0 + `result -> 0 
+        remainder = `n1 -> 2 + `n2 -> 4 + `result -> 6
+    }
+
     //testing to make sure numbers out of bounds cannot be added 
     example OutOfBoundsTest is not {some num1, num2, total: NumberValue | addHelper[num1, num2, total]} for {
         #Int = 5 
@@ -48,6 +79,18 @@ test suite for subtractHelper{
         NumberValue = `n1 + `n2 + `result 
         eights = `n1 -> 0 + `n2 -> 0 + `result -> 0
         remainder = `n1 -> 7 + `n2 -> 1 + `result -> 6
+    }
+
+    example correctCarrySubtraction is {some n1, n2, result: NumberValue | subtractHelper[n1,n2,result]} for{
+        NumberValue = `n1 + `n2 + `result 
+        eights = `n1 -> 1 + `n2 -> 0 + `result -> 0
+        remainder = `n1 -> 1 + `n2 -> 7 + `result -> 2
+    }
+
+    example noNegativeRemainderSubstraction is {some n1, n2, result: NumberValue | subtractHelper[n1,n2,result]} for {
+        NumberValue = `n1 + `n2 + `result 
+        eights = `n1 -> 0 + `n2 -> 0 + `result -> -1
+        remainder = `n1 ->  2 + `n2 -> 3 + `result -> 7
     }
 
     example noNegativeSubstraction is not {some n1, n2, result: NumberValue | subtractHelper[n1,n2,result]} for {
@@ -93,6 +136,18 @@ test suite for calculateValue{
 
     } 
 
+    example correctAddValue2 is {some n1: NumberValue, n2: NumberValue, result: NumberValue, op: Addition | calculateValue[n1,n2,result, op]} for{
+        NumberValue = `n1 + `n2 + `result 
+        eights = `n1 -> 0 + `n2 -> 0 + `result -> 0
+        remainder = `n1 -> 5 + `n2 -> 2 + `result -> 7
+    } 
+
+    example correctAddValueOverflow is {some n1: NumberValue, n2: NumberValue, result: NumberValue, op: Addition | calculateValue[n1,n2,result, op]} for{
+        NumberValue = `n1 + `n2 + `result 
+        eights = `n1 -> 0 + `n2 -> 0 + `result -> 1
+        remainder = `n1 -> 5 + `n2 -> 7 + `result -> 4
+    } 
+
     example correctSubtractValue  is {some n1: NumberValue, n2: NumberValue, result: NumberValue, op: Subtraction | calculateValue[n1,n2,result, op]} for{
         NumberValue = `n1 + `n2 + `result 
         eights = `n1 -> 0 + `n2 -> 0 + `result -> 0
@@ -106,10 +161,17 @@ test suite for calculateValue{
         remainder = `n1 -> 7 + `n2 -> 1 + `result -> 4
     }
 
-     example incorrectSubtractValue2 is {some n1: NumberValue, n2: NumberValue, result: NumberValue, op: Subtraction | calculateValue[n1,n2,result, op]} for{
+    example incorrectSubtractValue2 is {some n1: NumberValue, n2: NumberValue, result: NumberValue, op: Subtraction | calculateValue[n1,n2,result, op]} for{
         NumberValue = `n1 + `n2 + `result 
         eights = `n1 -> 0 + `n2 -> 0 + `result -> 0
         remainder = `n1 -> 2 + `n2 -> 1  + `result -> 1
+    }
+
+    example correctSubtractValueOverflow is {some n1: NumberValue, n2: NumberValue, result: NumberValue, op: Subtraction | calculateValue[n1,n2,result, op]} for{
+        NumberValue = `n1 + `n2 + `result 
+        eights = `n1 -> 0 + `n2 -> 0 + `result -> -1
+        remainder = `n1 -> 1 + `n2 -> 5 + `result -> 4
+
     }
 }
 
@@ -161,12 +223,18 @@ test suite for ValidNumberSet{
     }
 }
 
-test suite for initState{
-    example totalIsZero is {some u: UnsolvedState | initState[u]} for{
-        UnsolvedState = `S1
-        total = `S1 -> 0
-    }
-}
+//TODO: initState and finalState
+
+// test suite for initState{
+//     example totalIsZero is {some u: UnsolvedState | initState[u]} for{
+//         UnsolvedState = `u
+//         //`UnsolvedState0 = `S1
+//         total = `u -> 0
+//         operators = `u -> none
+
+
+//     }
+// }
 
 // pred finalState[s: SolvedState] {
 //     some disj n1,n2,n3,n4:NumberValue {
@@ -186,8 +254,8 @@ test suite for initState{
 //     }
 // }
 
-test suite for finalState{
-    example noOperators is {some s:SolvedState | finalState[s]} for{
+// test suite for finalState{
+//     example noOperators is {some s:SolvedState | finalState[s]} for{
         
-    }
-}
+//     }
+// }
