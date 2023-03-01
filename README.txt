@@ -9,6 +9,16 @@ project if we had attempted the original game. In addition, in the real world, t
 'unsolvable' cases given four numbers. However, in our project, we addressed this problem by 
 generating four numbers until we can 'hand' users a deck with a solution. 
 
+Here are the given constraints and assumptions for the model: 
+- The four numbers generated must be unique (no duplicates) and within 1-10 
+- Operators can be used more than once in a given solution 
+- We have to use all four given numbers to make 24 
+- We do not need to use both Addition or Subtraction in a given solution 
+- We must start with a number and end iwth a number 
+- Division shoudl use floating point or rational arithmetic 
+- Forming mulitple digit numbers from the supplied digits is disallowed (i.e an answer of 12 + 12 when given 1,2,2,1 is incorrect) 
+- The order fo the digits when given does not need to be preserved. 
+
 Design Choices: 
 
 Sigs: 
