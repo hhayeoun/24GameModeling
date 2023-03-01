@@ -64,7 +64,7 @@ pred subtractHelper[current:NumberValue, new_num:NumberValue, result:NumberValue
         result.eights = subtract[subtract[current.eights,new_num.eights],1]
         result.remainder = add[add[subtract[current.remainder, new_num.remainder], 7], 1]
     } else {
-        result.eights = subtract[current.eights, new_num.eights]
+        result.eights = subtract[current.eights,new_num.eights]
         result.remainder = subtract[current.remainder, new_num.remainder]
     }
 }
@@ -81,13 +81,11 @@ pred subtractHelper[current:NumberValue, new_num:NumberValue, result:NumberValue
 pred multiplyHelper[current:NumberValue, new_num:NumberValue, result:NumberValue] {
     result.remainder = multiply[current.remainder, new_num.remainder]
 }
-
 fun multiplyHelper2(current:NumberValue, new_num:NumberValue): NumberValue {
     let new_total = NumberValue {
         new_num <= 0 => new_total else multiplyHelper2[addHelperTwo[current,new_num], subtract[new_num, 1]]
     }
 }
-
 fun addHelperTwo(current:NumberValue, new_num:NumberValue): NumberValue {
     let result = NumberValue {
         add[current.remainder,new_num.remainder] < current.remainder

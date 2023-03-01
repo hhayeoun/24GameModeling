@@ -161,3 +161,33 @@ test suite for ValidNumberSet{
     }
 }
 
+test suite for initState{
+    example totalIsZero is {some u: UnsolvedState | initState[u]} for{
+        UnsolvedState = `S1
+        total = `S1 -> 0
+    }
+}
+
+// pred finalState[s: SolvedState] {
+//     some disj n1,n2,n3,n4:NumberValue {
+//         some t: NumberValue, o:OperatorStack, o1,o2,o3:Operator {
+//         //makes sure that the numbers given numbers are from 1 - 10 
+//             ValidNumberSet[n1,n2,n3,n4,t,o1,o2,o3]
+//             s.numbers.num1 = n1
+//             s.numbers.num2 = n2
+//             s.numbers.num3 = n3
+//             s.numbers.num4 = n4
+//             o.op1 = o1
+//             o.op2 = o2
+//             o.op3 = o3
+//             s.operators = o
+//             s.total = t
+//         }
+//     }
+// }
+
+test suite for finalState{
+    example noOperators is {some s:SolvedState | finalState[s]} for{
+        
+    }
+}
