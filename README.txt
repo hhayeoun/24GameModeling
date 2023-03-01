@@ -80,16 +80,3 @@ Run Statement:
 We are running the pred TransitionStates (with the correct order for how our preds should be called) for two states (unsolved & solved), 
 two operator & number stack for both states and 7 numbervalues (four original values, 3 values from the manipulation of each value with each other, and one total value)
 
-
-
-
-
-
-
-
-
-
-What are you trying to model? Include a brief description that would give someone unfamiliar with the topic a basic understanding of your goal.
-Give an overview of your model design choices, what checks or run statements you wrote, and what we should expect to see from an instance produced by the Sterling visualizer. How should we look at and interpret an instance created by your spec? Did you create a custom visualization, or did you use the default?
-At a high level, what do each of your sigs and preds represent in the context of the model? Justify the purpose for their existence and how they fit together.
-In addition to the README be sure to document your model and test files.
