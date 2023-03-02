@@ -37,7 +37,7 @@ Using the Sterling Visualizer, the SolvedState is the state in which it points t
 from UnsolvedState. However, SolvedState has the numbers in a specific order such that num1 is the first value in the
 equation, num2 is second number in the equation, etc. Operators will point to an OperatorStack that will have three specific operators that are 
 either Addition or Subtraction. These operators are in a specific order such that op1 is the first operator used, op2 is the second operator used, 
-and op3 is the third operator used. The equation should equal to 24 (eights = 3 and remainder = 0. 
+and op3 is the third operator used. The equation should equal to 24 (eights = 3 and remainder = 0). 
 The total should also equal 24 (eights = 3 and remainder = 0).
 
 
