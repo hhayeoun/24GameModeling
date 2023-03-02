@@ -197,31 +197,3 @@ test suite for ValidNumberSet{
         remainder = `n1 -> 7 + `n2 -> 1 + `result -> 6 + `n3 -> 3 + `result2 -> 3 + `n4 -> 4 + `result3 -> -1
     }
 }
-
-//TODO: initState and finalState
-
-// test suite for initState{
-//     example totalIsZero is {some u: UnsolvedState,s:SolvedState | initState[u]} for{
-//         UnsolvedState = `u
-//         SolvedState = `s
-//         State = UnsolvedState + SolvedState
-
-//         NumberValue = `n1
-//         eights = `n1 -> 0
-//         remainder = `n1 -> 0
-        
-//         //`UnsolvedState0 = `S1
-//         //total = `u -> `n1
-//         operators = `u -> none
-//         //total = `u -> `n1
-
-
-//     }
-// }
-
-
-// test suite for finalState{
-//     example noOperators is {some s:SolvedState | finalState[s]} for{
-        
-//     }
-// }
