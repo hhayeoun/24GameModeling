@@ -26,7 +26,7 @@ to create 24 is also unknown but within the bounds of addition and subtraction. 
 The SolvedState is essentially the answer key. The SolvedState shows the order of the numbers and which operators to use and at what
 location to use them at to produce 24. 
 
-We used the default customization.
+We used the default visualization.
 
 Using the Steriling Visualizer, UnsolvedState is the state in which the state's numbers points to a NumberStack that contain four NumberValues.
 NumberValues is our representation of numbers so that it can keep track of numbers greater than 7 and still be within Forge bit-width.
