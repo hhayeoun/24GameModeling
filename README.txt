@@ -18,9 +18,32 @@ Here are the given constraints and assumptions for the model:
 - The order of the digits when given does not need to be preserved. 
 
 Design Choices: 
+Overview of Model Design Choices:
+There are two states: the UnsolvedState and SolvedState. At a high level, the UnsolvedState is the state in which the user
+is given four unique numbers 1-10 that has a solution that produces 24, but the user has to figure out the order of the numbers used and which
+operators to use in a specific order to produce 24. The correct order of the numbers is unknown and the operators used
+to create 24 is also unknown but within the bounds of addition and subtraction. This state is where the user has to solve the puzzle.
+The SolvedState is essentially the answer key. The SolvedState shows the order of the numbers and which operators to use and at what
+location to use them at to produce 24. 
+
+We used the default customization.
+
+Using the Steriling Visualizer, UnsolvedState is the state in which the state's numbers points to a NumberStack that contain four NumberValues.
+NumberValues is our representation of numbers so that it can keep track of numbers greater than 7 and still be within Forge bit-width.
+These four NumberValues should be able to produce a NumberValue that is equivalent to 24 (eights = 3 and remainder = 0) using only Addition
+and Subtraction. However, the Operators used will be unknown in this state and therefore the operators will be none. The total will also be 0.
+
+Using the Sterling Visualizer, the SolvedState is the state in which it points to a different NumberStack that contain the same four NumberValues 
+from UnsolvedState. However, SolvedState has the numbers in a specific order such that num1 is the first value in the
+equation, num2 is second number in the equation, etc. Operators will point to an OperatorStack that will have three specific operators that are 
+either Addition or Subtraction. These operators are in a specific order such that op1 is the first operator used, op2 is the second operator used, 
+and op3 is the third operator used. The equation should equal to 24 (eights = 3 and remainder = 0. 
+The total should also equal 24 (eights = 3 and remainder = 0).
+
+
 
 Sigs: 
-Unsolved & SolvedState: 
+UnsolvedState & SolvedState: 
 We have two sigs which extends from an abstract sig, State. Both states have a stack with four 
 numbers between 1-10, a lone stack of three operators, and a total that will hold the value 
 that you will get after manipulating the stack of numbers with the stack of operators. The UnsolvedState

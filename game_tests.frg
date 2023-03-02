@@ -113,15 +113,6 @@ test suite for subtractHelper{
     }
 }
 
-
-// pred calculateValue[num1,num2,result:NumberValue,op:Operator] {
-//     (op = Addition) implies {
-//         addHelper[num1,num2,result]
-//     } else{
-//         subtractHelper[num1,num2,result]
-//     }
-// }
-
 test suite for calculateValue{
     example correctAddValue is {some n1: NumberValue, n2: NumberValue, result: NumberValue, op: Addition | calculateValue[n1,n2,result, op]} for{
         NumberValue = `n1 + `n2 + `result 
@@ -175,22 +166,6 @@ test suite for calculateValue{
     }
 }
 
-
-// pred ValidNumberSet[num1,num2,num3,num4,total:NumberValue,o1,o2,o3:Operator] {
-//     some result1,result2,result3:NumberValue | {
-//         //calculates the results using the number and operators provided
-//         calculateValue[num1,num2,result1,o1]
-//         calculateValue[result1,num3,result2,o2]
-//         calculateValue[result2,num4,result3,o3]
-
-//         //end result should equal 24 and set total = 24
-//         result3.eights = 3
-//         result3.remainder = 0
-//         total = result3
-//     }
-    
-// }
-
 test suite for ValidNumberSet{
     example inBoundsAdditionNumberSet is {some n1,n2,n3,n4,total: NumberValue, o1,o2,o3: Addition| ValidNumberSet[n1,n2,n3,n4,total,o1,o2,o3]} for {
         NumberValue = `n1 + `n2 + `n3+ `n4 + `result + `result2 + `result3 
@@ -226,33 +201,24 @@ test suite for ValidNumberSet{
 //TODO: initState and finalState
 
 // test suite for initState{
-//     example totalIsZero is {some u: UnsolvedState | initState[u]} for{
+//     example totalIsZero is {some u: UnsolvedState,s:SolvedState | initState[u]} for{
 //         UnsolvedState = `u
+//         SolvedState = `s
+//         State = UnsolvedState + SolvedState
+
+//         NumberValue = `n1
+//         eights = `n1 -> 0
+//         remainder = `n1 -> 0
+        
 //         //`UnsolvedState0 = `S1
-//         total = `u -> 0
+//         //total = `u -> `n1
 //         operators = `u -> none
+//         //total = `u -> `n1
 
 
 //     }
 // }
 
-// pred finalState[s: SolvedState] {
-//     some disj n1,n2,n3,n4:NumberValue {
-//         some t: NumberValue, o:OperatorStack, o1,o2,o3:Operator {
-//         //makes sure that the numbers given numbers are from 1 - 10 
-//             ValidNumberSet[n1,n2,n3,n4,t,o1,o2,o3]
-//             s.numbers.num1 = n1
-//             s.numbers.num2 = n2
-//             s.numbers.num3 = n3
-//             s.numbers.num4 = n4
-//             o.op1 = o1
-//             o.op2 = o2
-//             o.op3 = o3
-//             s.operators = o
-//             s.total = t
-//         }
-//     }
-// }
 
 // test suite for finalState{
 //     example noOperators is {some s:SolvedState | finalState[s]} for{

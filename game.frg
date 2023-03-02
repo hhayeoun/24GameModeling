@@ -26,7 +26,6 @@ sig NumberValue{
 abstract sig Operator{}
 one sig Addition extends Operator{}
 one sig Subtraction extends Operator{}
-//one sig Multiply,Divide extends Operator{}
 
 //4 numbers within the stack
 sig NumberStack{
@@ -176,7 +175,7 @@ pred Transition[u:UnsolvedState, s:SolvedState] {
     }
 }
 
-
+//runs all the predicates
 pred TransitionStates {
     some init:UnsolvedState, final: SolvedState {
             initState[init]
